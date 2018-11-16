@@ -1,0 +1,20 @@
+[
+    {
+        "id": "6733720e.a5ed9c",
+        "type": "inject",
+        "z": "fe383ca8.15a51",
+        "name": "",
+        "topic": "",
+        "payload": "QB0[0]",
+        "payloadType": "flow",
+        "repeat": "0.1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 370,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    }
+]
