@@ -1,0 +1,173 @@
+[
+    {
+        "id": "933bd169.a77cc8",
+        "type": "tab",
+        "label": "PLC_Communication_2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "90bdfd0f.fa031",
+        "type": "inject",
+        "z": "933bd169.a77cc8",
+        "name": "Run",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "0",
+        "x": 90,
+        "y": 140,
+        "wires": [
+            [
+                "77f42a7b.8cb8b4",
+                "b181cdba.fd33b"
+            ]
+        ]
+    },
+    {
+        "id": "77f42a7b.8cb8b4",
+        "type": "function",
+        "z": "933bd169.a77cc8",
+        "name": "f_sine",
+        "func": "var x = new Array(101);\nx[0] = 0;\nvar y = new Array(101);\n//100 iterations\nvar increase = Math.PI * 2 / 100;\n\nfor(i=0; i <= 100; i ++)\n{\n    y[i] = Math.sin(x[i]);\n    msg.payload = {\"value\" : [y, x]};\n    x[i+1] = x[i] + increase;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 230,
+        "y": 140,
+        "wires": [
+            [
+                "6e3bd2b0.914cbc",
+                "742f5c68.b0bbdc"
+            ]
+        ]
+    },
+    {
+        "id": "6e3bd2b0.914cbc",
+        "type": "function",
+        "z": "933bd169.a77cc8",
+        "name": "data_x",
+        "func": "msg.payload = msg.payload.value[1];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 430,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7060505c.1c6828",
+        "type": "debug",
+        "z": "933bd169.a77cc8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 510,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "742f5c68.b0bbdc",
+        "type": "function",
+        "z": "933bd169.a77cc8",
+        "name": "data_y",
+        "func": "msg.payload.value = msg.payload.value[0];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 430,
+        "y": 120,
+        "wires": [
+            [
+                "68ec1e69.cac59"
+            ]
+        ]
+    },
+    {
+        "id": "b181cdba.fd33b",
+        "type": "s7comm read",
+        "z": "933bd169.a77cc8",
+        "connection": "1863b1c8.91de16",
+        "payload": "{\"S7_Type\":\"DB\",\"S7_DBnum\":\"101\",\"S7_Datatype\":\"R\",\"S7_Offset\":\"0\",\"S7_BitOffset\":\"0\",\"S7_Quantity\":\"101\",\"S7_Name\":\"readPLC\"}",
+        "s7Name": "readPLC",
+        "topic": "",
+        "name": "",
+        "signalSetted": false,
+        "none": "true",
+        "repeat": "",
+        "once": true,
+        "x": 200,
+        "y": 260,
+        "wires": [
+            [
+                "7060505c.1c6828"
+            ]
+        ]
+    },
+    {
+        "id": "68ec1e69.cac59",
+        "type": "s7comm write",
+        "z": "933bd169.a77cc8",
+        "connection": "1863b1c8.91de16",
+        "payload": "{\"S7_Type\":\"DB\",\"S7_DBnum\":\"100\",\"S7_Datatype\":\"R\",\"S7_Offset\":\"0\",\"S7_BitOffset\":\"0\",\"S7_Quantity\":\"101\",\"S7_Name\":\"writePLC\"}",
+        "s7Name": "writePLC",
+        "topic": "",
+        "name": "",
+        "signalSetted": false,
+        "x": 600,
+        "y": 120,
+        "wires": [
+            [
+                "88cb5d32.123888"
+            ]
+        ]
+    },
+    {
+        "id": "88cb5d32.123888",
+        "type": "debug",
+        "z": "933bd169.a77cc8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 640,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "1863b1c8.91de16",
+        "type": "s7comm",
+        "z": "",
+        "ip": "192.168.33.3",
+        "port": "102",
+        "rack": "0",
+        "slot": "1",
+        "payload": [
+            {
+                "S7_Type": "DB",
+                "S7_DBnum": "100",
+                "S7_Datatype": "R",
+                "S7_Offset": "0",
+                "S7_BitOffset": "0",
+                "S7_Quantity": "101",
+                "S7_Name": "writePLC"
+            },
+            {
+                "S7_Type": "DB",
+                "S7_DBnum": "101",
+                "S7_Datatype": "R",
+                "S7_Offset": "0",
+                "S7_BitOffset": "0",
+                "S7_Quantity": "101",
+                "S7_Name": "readPLC"
+            }
+        ]
+    }
+]
